@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+
+Route::post('/remove', function (Request $request) {
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('public');
+
+        $argv = str_replace("\\", "\\\\", str_replace("/", "\\", str_replace("public\public", "public", Storage::disk('public')->path($path))));
+
+        $process = new Process(['python', public_path('python.py'), $argv]);
+        $process->run();
+
+        // error handling
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Background removed successfully.',
+            'url' => asset(str_replace("\r\n", "", $process->getOutput()))
+        ], 200);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Image not found',
+    ], 400);
+});
