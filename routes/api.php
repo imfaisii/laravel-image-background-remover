@@ -28,7 +28,7 @@ Route::post('/remove', function (Request $request) {
 
         $argv = str_replace("\\", "\\\\", str_replace("/", "\\", str_replace("public\public", "public", Storage::disk('public')->path($path))));
 
-        $process = new Process(['python', public_path('python.py'), $argv]);
+        $process = new Process(['C:\laragon\bin\python\python-3.10\python', public_path('python.py'), $argv]);
         $process->run();
 
         // error handling
