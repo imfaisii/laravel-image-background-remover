@@ -17,11 +17,6 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 Route::post('/remove', function (Request $request) {
     if ($request->hasFile('image')) {
         $path = $request->file('image')->store('public');
@@ -44,7 +39,7 @@ Route::post('/remove', function (Request $request) {
     }
 
     return response()->json([
-        'status' => 'success',
+        'status' => 'error',
         'message' => 'Image not found',
     ], 400);
-});
+})->middleware('auth:sanctum');
