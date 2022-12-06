@@ -31,6 +31,11 @@ Route::post('/remove', function (Request $request) {
             throw new ProcessFailedException($process);
         }
 
+        auth()->user()->conversions()->create([
+            'image' => $path,
+            'no_bg_image' => str_replace("\r\n", "", $process->getOutput())
+        ]);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Background removed successfully.',
