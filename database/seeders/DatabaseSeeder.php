@@ -17,15 +17,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        $token = User::firstOrCreate([
+        $user = User::firstOrCreate([
             'name' => 'Super Admin',
             'email' => 'superadmin@grapetechnologies.co',
         ], [
             'password' => Hash::make('super@123')
         ]);
 
-        echo $token->plainTextToken;
+        $token = $user->createToken('master');
+
+        dump("Your token is : $token->plainTextToken");
     }
 }
