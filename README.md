@@ -24,7 +24,7 @@ Laravel APP to remove background from an image
 
 - Just post an image with the key image to the endpoint <strong>/api/remove</strong>
 
-You will get a url to the image. There is no model trained for removing the images, so the results won't perfect.
+You will get a url to the image. There is no model trained for removing the images, so the results won't be perfect.
 
 ## Contribution
 
