@@ -11,7 +11,7 @@
 
 Laravel APP to remove background from an image
 
-## How to setup ( requires PHP version > 8 && Python )
+## How to setup ( requires PHP version > 8 & Python )
 
 - composer install
 - cp .env.example .env ( enter your DB credentials )
