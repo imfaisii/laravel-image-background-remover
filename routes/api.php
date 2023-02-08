@@ -20,26 +20,26 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 Route::post('/remove', function (Request $request) {
     if ($request->hasFile('image')) {
         $path = $request->file('image')->store('public');
-
-        $argv = str_replace("\\", "\\\\", str_replace("/", "\\", str_replace("public\public", "public", Storage::disk('public')->path($path))));
-
-        $process = new Process(['C:\laragon\bin\python\python-3.10\python', public_path('python.py'), $argv]);
+        
+        $process = new Process(['python3', public_path('python.py'), Storage::path($path)]);
         $process->run();
 
         // error handling
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+        
+        $replaced = str_replace("\n", "", $process->getOutput());
 
         auth()->user()->conversions()->create([
             'image' => $path,
-            'no_bg_image' => str_replace("\r\n", "", $process->getOutput())
+            'no_bg_image' => $replaced
         ]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Background removed successfully.',
-            'url' => asset(str_replace("\r\n", "", $process->getOutput()))
+            'url' => asset($replaced)
         ], 200);
     }
 
