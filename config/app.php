@@ -58,6 +58,10 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'python' => [
+        'path' => env('PYTHON_PATH', '/usr/bin/python')
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

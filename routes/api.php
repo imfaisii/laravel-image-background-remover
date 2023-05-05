@@ -20,15 +20,15 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 Route::post('/remove', function (Request $request) {
     if ($request->hasFile('image')) {
         $path = $request->file('image')->store('public');
-        
-        $process = new Process(['python3', public_path('python.py'), Storage::path($path)]);
+
+        $process = new Process([config('app.python.path'), public_path('python.py'), Storage::path($path)]);
         $process->run();
 
         // error handling
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-        
+
         $replaced = str_replace("\n", "", $process->getOutput());
 
         auth()->user()->conversions()->create([
